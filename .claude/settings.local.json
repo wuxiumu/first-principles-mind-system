@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(npx create-vite@latest *)",
+      "Bash(npm install *)",
+      "Bash(cp -r fps-temp/* .)",
+      "Bash(cp -r fps-temp/.vscode .vscode)",
+      "Bash(rm -rf fps-temp)",
+      "Bash(cp *)",
+      "Bash(cp -R fps-temp/src ./src)",
+      "Bash(cp -R fps-temp/public ./public)",
+      "Bash(cp fps-temp/node_modules -R node_modules)",
+      "Bash(rm -rf src public index.html package.json node_modules package-lock.json)",
+      "Bash(mv fps-temp/src fps-temp/public fps-temp/index.html fps-temp/package.json fps-temp/package-lock.json fps-temp/node_modules fps-temp/tsconfig.json .)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:5175/)",
+      "Bash(npm list *)",
+      "Bash(curl -s http://localhost:5178/src/index.css)",
+      "Bash(npm uninstall *)",
+      "Bash(pkill -f \"vite\")",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(curl -s http://localhost:5174/books)",
+      "Bash(node *)",
+      "Bash(npm start *)",
+      "Bash(curl -s http://localhost:3001/api/books)",
+      "Bash(curl -s http://localhost:3001/api/books/7d-mgmt)",
+      "Bash(python3 -m json.tool)",
+      "Bash(lsof *)",
+      "Bash(chmod +x *)",
+      "Bash(npx vite *)",
+      "Bash(./symlink.sh)",
+      "Bash(curl -s http://localhost:8080/api/books/7d-mgmt)",
+      "Bash(curl -s http://localhost:8080/)"
+    ]
+  }
+}
