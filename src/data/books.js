@@ -12,7 +12,7 @@ export const books = [
 ]
 
 // API 基础 URL
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001/api/index.php'
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001/api'
 
 // 获取书籍详情（包含所有天数）
 export async function getBook(bookId) {

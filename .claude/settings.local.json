@@ -31,7 +31,9 @@
       "Bash(npx vite *)",
       "Bash(./symlink.sh)",
       "Bash(curl -s http://localhost:8080/api/books/7d-mgmt)",
-      "Bash(curl -s http://localhost:8080/)"
+      "Bash(curl -s http://localhost:8080/)",
+      "Bash(php -l /Users/mac/WebstormProjects/first-principles-mind-system/server/server.php)",
+      "Bash(php -l /Users/mac/WebstormProjects/first-principles-mind-system/server/index.php)"
     ]
   }
 }

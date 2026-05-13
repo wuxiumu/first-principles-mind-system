@@ -85,8 +85,8 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
-    # PHP API
-    location /api/ {
+    # PHP API（精准匹配 /api，支持 ?action=xxx 查询参数）
+    location = /api {
         fastcgi_pass unix:/tmp/php-cgi-74.sock;  # 改为你的 PHP-FPM socket
         fastcgi_param SCRIPT_FILENAME $document_root/api/index.php;
         include fastcgi_params;
