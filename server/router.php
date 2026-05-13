@@ -5,7 +5,7 @@
 
 // 判断是 API 请求还是静态文件
 if (strpos($_SERVER['REQUEST_URI'], '/api/') === 0) {
-    require __DIR__ . '/api/server.php';
+    require __DIR__ . '/server.php';
     return true;
 }
 

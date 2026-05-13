@@ -1,6 +1,7 @@
 <?php
 // FPS API Server
 // Usage: php -S localhost:3001 -t server/ server/server.php
+// All params via URL query string: ?action=xxx
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -33,32 +34,27 @@ $bookDirMap = [
 ];
 
 $baseDir = __DIR__ . '/../data/book';
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$path = str_replace('/api/', '', $path);
-$segments = explode('/', trim($path, '/'));
+$action = $_GET['action'] ?? '';
 
-// GET /api/books
-if ($segments[0] === 'books') {
-    // GET /api/books/:bookId/days/:day
-    if (isset($segments[2]) && $segments[2] === 'days' && isset($segments[3])) {
-        getDay($books, $baseDir, $bookDirMap, $segments);
-    // GET /api/books/:bookId/intro
-    } elseif (isset($segments[2]) && $segments[2] === 'intro') {
-        getIntro($baseDir, $bookDirMap, $segments);
-    // GET /api/books/:bookId
-    } elseif (isset($segments[1])) {
-        getBook($books, $baseDir, $bookDirMap, $segments);
-    // GET /api/books
-    } else {
-        json_response($books);
-    }
+// ?action=books
+if ($action === 'books') {
+    json_response($books);
+// ?action=book&id=7d-mgmt
+} elseif ($action === 'book') {
+    getBook($books, $baseDir, $bookDirMap);
+// ?action=day&book_id=7d-mgmt&day=1
+} elseif ($action === 'day') {
+    getDay($baseDir, $bookDirMap);
+// ?action=intro&book_id=7d-mgmt
+} elseif ($action === 'intro') {
+    getIntro($baseDir, $bookDirMap);
 } else {
-    http_response_code(404);
-    json_response(['error' => 'Not found']);
+    http_response_code(400);
+    json_response(['error' => 'Unknown action']);
 }
 
-function getBook($books, $baseDir, $bookDirMap, $segments) {
-    $bookId = $segments[1];
+function getBook($books, $baseDir, $bookDirMap) {
+    $bookId = $_GET['id'] ?? '';
     $book = findBook($books, $bookId);
 
     if (!$book) {
@@ -102,9 +98,15 @@ function getBook($books, $baseDir, $bookDirMap, $segments) {
     json_response(array_merge($book, ['days' => $days]));
 }
 
-function getDay($books, $baseDir, $bookDirMap, $segments) {
-    $bookId = $segments[1];
-    $day = $segments[3];
+function getDay($baseDir, $bookDirMap) {
+    $bookId = $_GET['book_id'] ?? '';
+    $day = $_GET['day'] ?? '';
+
+    if (!$bookId || !$day) {
+        http_response_code(400);
+        json_response(['error' => 'Missing book_id or day']);
+        return;
+    }
 
     $dirName = $bookDirMap[$bookId] ?? $bookId;
     $filePath = $baseDir . '/' . $dirName . '/days/day-' . $day . '.md';
@@ -128,8 +130,8 @@ function getDay($books, $baseDir, $bookDirMap, $segments) {
     ]);
 }
 
-function getIntro($baseDir, $bookDirMap, $segments) {
-    $bookId = $segments[1];
+function getIntro($baseDir, $bookDirMap) {
+    $bookId = $_GET['book_id'] ?? '';
     $dirName = $bookDirMap[$bookId] ?? $bookId;
     $nodeFile = $baseDir . '/' . $dirName . '/node.md';
 

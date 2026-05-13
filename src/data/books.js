@@ -12,12 +12,12 @@ export const books = [
 ]
 
 // API 基础 URL
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001/api'
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001/api/index.php'
 
 // 获取书籍详情（包含所有天数）
 export async function getBook(bookId) {
   try {
-    const res = await fetch(`${API_BASE}/books/${bookId}`)
+    const res = await fetch(`${API_BASE}?action=book&id=${bookId}`)
     if (!res.ok) throw new Error('Failed to fetch book')
     return res.json()
   } catch (error) {
@@ -29,7 +29,7 @@ export async function getBook(bookId) {
 // 获取某一天的内容
 export async function getDay(bookId, day) {
   try {
-    const res = await fetch(`${API_BASE}/books/${bookId}/days/${day}`)
+    const res = await fetch(`${API_BASE}?action=day&book_id=${bookId}&day=${day}`)
     if (!res.ok) throw new Error('Failed to fetch day')
     return res.json()
   } catch (error) {
@@ -41,7 +41,7 @@ export async function getDay(bookId, day) {
 // 获取简介
 export async function getIntro(bookId) {
   try {
-    const res = await fetch(`${API_BASE}/books/${bookId}/intro`)
+    const res = await fetch(`${API_BASE}?action=intro&book_id=${bookId}`)
     if (!res.ok) throw new Error('Failed to fetch intro')
     return res.json()
   } catch (error) {
