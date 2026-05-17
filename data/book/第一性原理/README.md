@@ -1,21 +1,50 @@
 ---
-id: first-principles-index
-type: index
-title: "第一性原理（知识包）"
+id: first-principles
+type: book
+title: "第一性原理"
+cover: "🧭"
+description: "一套用于拆解问题、做决策和形成可执行方案的第一性原理知识包"
 created_at: "2026-05-12"
+sort_order: 30
+progress: 0
 timezone: "Asia/Shanghai"
-tags: ["first-principles", "thinking", "meta-skill"]
+tags:
+  - 思维
+  - 决策
+  - 方法论
+purpose: "训练用户把复杂问题还原到底层事实、约束和关键假设，再推导可执行方案。"
+summary: "第一性原理不是否定经验，而是先把经验当假设，用事实和约束重新验证方案是否成立。"
+prediction: "持续使用后，用户会减少观点争论和无效返工，更稳定地产出可验证、可落地的决策。"
 ---
 
-# 第一性原理（知识包）
+# 第一性原理
 
-这套内容的目标不是“解释概念”，而是让你在日常工作/学习/决策中，能稳定地用第一性原理把问题拆清楚、做出可执行方案。
+## 计划
+
+这套内容分 5 章推进：
+
+1. 核心概念：区分事实、约束、假设、目标和机制。
+2. 标准流程：按 8 步从问题推导到方案。
+3. 常见误区：避免把观点、口号和行业经验误当事实。
+4. 最佳实践：用检查清单提高推演质量。
+5. 模板库：把方法沉淀成可复用工具。
+
+## 目的
+
+这套内容的目标不是解释概念，而是让你在日常工作、学习和决策中，稳定地把问题拆清楚、把假设写出来、把方案做成可验证动作。
+
+## 总结
+
+第一性原理 = 把问题还原到不可再省的底层事实和约束，再从这些事实出发重新推演方案。它不是为了显得高级，而是为了减少模糊争论、路径依赖和无效返工。
+
+## 预测
+
+如果长期套用这套流程，团队讨论会从观点对撞转向假设验证；个人决策会从“我觉得”转向“事实、约束、机制和验证阈值”。
 
 ## 目录
 
-1. [核心概念](/Users/mac/WebstormProjects/first-principles-mind-system/data/book/第一性原理/01-核心概念.md)
-2. [标准流程（可复用）](/Users/mac/WebstormProjects/first-principles-mind-system/data/book/第一性原理/02-标准流程.md)
-3. [常见问题与误区](/Users/mac/WebstormProjects/first-principles-mind-system/data/book/第一性原理/03-常见问题与误区.md)
-4. [最佳实践与检查清单](/Users/mac/WebstormProjects/first-principles-mind-system/data/book/第一性原理/04-最佳实践与检查清单.md)
-5. [模板库（直接套用）](/Users/mac/WebstormProjects/first-principles-mind-system/data/book/第一性原理/05-模板库.md)
-
+1. [核心概念](./01-核心概念.md)
+2. [标准流程（可复用）](./02-标准流程.md)
+3. [常见问题与误区](./03-常见问题与误区.md)
+4. [最佳实践与检查清单](./04-最佳实践与检查清单.md)
+5. [模板库（直接套用）](./05-模板库.md)

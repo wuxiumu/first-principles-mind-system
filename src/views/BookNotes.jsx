@@ -1,193 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
-import { books, getBook } from '../data/books'
+import { getBook, getBooks } from '../data/books'
 import useStore from '../store/useStore'
 import mermaid from 'mermaid'
-
-// 选择题数据（暂时硬编码，后续可从 API 获取）
-const quizData = {
-  '7d-mgmt-day-1': [
-    {
-      id: 'd1-q1',
-      question: '管理的本质是什么？',
-      options: [
-        { label: '管人，让员工听话', value: 1 },
-        { label: '开会安排任务', value: 2 },
-        { label: '让一群人围绕同一个目标，持续、稳定、低内耗地产出结果', value: 3 },
-        { label: '考核和激励', value: 4 },
-      ],
-      correct: 3,
-      explanation: '管理的本质是让一群人围绕同一个目标，持续、稳定、低内耗地产出结果，而不是管人或开会。',
-    },
-    {
-      id: 'd1-q2',
-      question: '为什么团队很忙但结果不好？',
-      options: [
-        { label: '员工不够努力', value: 1 },
-        { label: '没有设计，团队默认走向混乱', value: 2 },
-        { label: '管理者盯得不够紧', value: 3 },
-        { label: '资源不够', value: 4 },
-      ],
-      correct: 2,
-      explanation: '忙不等于有效。没有设计（目标/路径/标准/节奏/反馈），团队默认会走向混乱。',
-    },
-  ],
-  '7d-mgmt-day-2': [
-    {
-      id: 'd2-q1',
-      question: '以下哪个是可验收的目标？',
-      options: [
-        { label: '提升效率', value: 1 },
-        { label: '优化用户体验', value: 2 },
-        { label: '本周完成 3 个核心页面上线', value: 3 },
-        { label: '做好增长', value: 4 },
-      ],
-      correct: 3,
-      explanation: '"本周完成 3 个核心页面上线"有明确的交付物和截止时间，是可验收的目标。',
-    },
-    {
-      id: 'd2-q2',
-      question: '目标应该具备什么特点？',
-      options: [
-        { label: '有挑战性', value: 1 },
-        { label: '清楚、可衡量、有截止时间', value: 2 },
-        { label: '让团队兴奋', value: 3 },
-        { label: '老板认可', value: 4 },
-      ],
-      correct: 2,
-      explanation: '目标要具备三个特点：清楚、可衡量、有截止时间。',
-    },
-  ],
-  '7d-mgmt-day-3': [
-    {
-      id: 'd3-q1',
-      question: '任务拆解时，每个任务不需要包含什么？',
-      options: [
-        { label: '唯一负责人', value: 1 },
-        { label: '明确的交付物', value: 2 },
-        { label: '参与人员名单', value: 3 },
-        { label: '截止时间和验收标准', value: 4 },
-      ],
-      correct: 3,
-      explanation: '任务需要唯一负责人，而不是参与人员名单。多人参与容易导致责任不清。',
-    },
-    {
-      id: 'd3-q2',
-      question: '"大家都参与，但没人负责"会导致什么？',
-      options: [
-        { label: '效率更高', value: 1 },
-        { label: '团队更和谐', value: 2 },
-        { label: '烂账', value: 3 },
-        { label: '更好的协作', value: 4 },
-      ],
-      correct: 3,
-      explanation: '凡是没有负责人的任务，最后都会变成烂账。',
-    },
-  ],
-  '7d-mgmt-day-4': [
-    {
-      id: 'd4-q1',
-      question: '管理中最可怕的一句话是什么？',
-      options: [
-        { label: '这个需求做不了', value: 1 },
-        { label: '差不多了', value: 2 },
-        { label: '我需要帮助', value: 3 },
-        { label: '这个要延期', value: 4 },
-      ],
-      correct: 2,
-      explanation: '"差不多了"是最可怕的一句话，没有标准，就没有管理，只有感觉。',
-    },
-    {
-      id: 'd4-q2',
-      question: '标准的目的是什么？',
-      options: [
-        { label: '让团队更累', value: 1 },
-        { label: '展示管理者的权威', value: 2 },
-        { label: '减少扯皮和返工，让交付更可控', value: 3 },
-        { label: '增加工作量', value: 4 },
-      ],
-      correct: 3,
-      explanation: '标准的目的不是苛刻，是减少扯皮和返工，让交付更可控。',
-    },
-  ],
-  '7d-mgmt-day-5': [
-    {
-      id: 'd5-q1',
-      question: '好的过程管理应该关注什么？',
-      options: [
-        { label: '员工是否加班', value: 1 },
-        { label: '每天汇报详细进度', value: 2 },
-        { label: '风险是否暴露', value: 3 },
-        { label: '会议是否准时', value: 4 },
-      ],
-      correct: 3,
-      explanation: '过程管理要让进度、质量、风险可见，盯风险而不是盯人。',
-    },
-    {
-      id: 'd5-q2',
-      question: '什么情况下应该立刻升级风险？',
-      options: [
-        { label: '员工请假时', value: 1 },
-        { label: '可能延期/质量不可控/跨部门卡住', value: 2 },
-        { label: '老板问起时', value: 3 },
-        { label: '项目结束时', value: 4 },
-      ],
-      correct: 2,
-      explanation: '当发现"可能延期/质量不可控/跨部门卡住"时，应该立刻升级，而不是自己硬扛。',
-    },
-  ],
-  '7d-mgmt-day-6': [
-    {
-      id: 'd6-q1',
-      question: '好的反馈应该具备什么特点？',
-      options: [
-        { label: '严厉、直接、公开', value: 1 },
-        { label: '及时、具体、能改', value: 2 },
-        { label: '委婉、模糊、私下', value: 3 },
-        { label: '详细、全面、正式', value: 4 },
-      ],
-      correct: 2,
-      explanation: '好的反馈有三个特点：及时、具体、能改。',
-    },
-    {
-      id: 'd6-q2',
-      question: '反馈应该针对什么？',
-      options: [
-        { label: '人格', value: 1 },
-        { label: '态度', value: 2 },
-        { label: '行为', value: 3 },
-        { label: '能力', value: 4 },
-      ],
-      correct: 3,
-      explanation: '反馈要针对行为，不要攻击人格。人可以被要求，事可以被纠正，但不要随便否定一个人。',
-    },
-  ],
-  '7d-mgmt-day-7': [
-    {
-      id: 'd7-q1',
-      question: '机制的作用是什么？',
-      options: [
-        { label: '限制团队灵活性', value: 1 },
-        { label: '让新人来了知道怎么做，不靠个人英雄主义', value: 2 },
-        { label: '增加管理者的权威', value: 3 },
-        { label: '让流程更复杂', value: 4 },
-      ],
-      correct: 2,
-      explanation: '机制让"新人来了知道怎么做、项目来了知道怎么拆、问题来了知道找谁"，不靠个人英雄主义也能稳定产出。',
-    },
-    {
-      id: 'd7-q2',
-      question: '应该优先沉淀什么机制？',
-      options: [
-        { label: '最复杂的流程', value: 1 },
-        { label: '老板最关心的事', value: 2 },
-        { label: '最高频、最高风险的问题', value: 3 },
-        { label: '所有工作流程', value: 4 },
-      ],
-      correct: 3,
-      explanation: '机制先做"最小可用"，解决最高频、最高风险的问题，不是一次性把一切都流程化。',
-    },
-  ],
-}
 
 function isMermaidBlock(line) {
   return line.startsWith('```mermaid') || line.startsWith('``` Mermaid')
@@ -279,14 +93,36 @@ function DayContent({ content }) {
 }
 
 export default function BookNotes() {
+  const [books, setBooks] = useState([])
   const [bookData, setBookData] = useState(null)
   const [selectedDay, setSelectedDay] = useState(null)
   const [showQuiz, setShowQuiz] = useState(false)
   const [quizAnswers, setQuizAnswers] = useState({})
   const [showResults, setShowResults] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [activeTag, setActiveTag] = useState('全部')
+  const [sortBy, setSortBy] = useState('newest')
 
-  const currentBook = books[0]
+  const allTags = useMemo(() => {
+    return ['全部', ...Array.from(new Set(books.flatMap(book => book.tags))).sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'))]
+  }, [books])
+
+  const filteredBooks = useMemo(() => {
+    const keyword = searchTerm.trim().toLowerCase()
+    const result = books.filter(book => {
+      const searchable = [book.title, book.description, ...book.tags].join(' ').toLowerCase()
+      const matchesKeyword = !keyword || searchable.includes(keyword)
+      const matchesTag = activeTag === '全部' || book.tags.includes(activeTag)
+      return matchesKeyword && matchesTag
+    })
+
+    return [...result].sort((a, b) => {
+      if (sortBy === 'title') return a.title.localeCompare(b.title, 'zh-Hans-CN')
+      if (sortBy === 'length') return b.totalDays - a.totalDays
+      return new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+    })
+  }, [activeTag, books, searchTerm, sortBy])
 
   useEffect(() => {
     mermaid.initialize({
@@ -296,18 +132,14 @@ export default function BookNotes() {
     })
   }, [])
 
-  // 加载书籍数据
   useEffect(() => {
-    async function loadBook() {
+    async function loadBooks() {
       setLoading(true)
-      const data = await getBook(currentBook.id)
-      setBookData(data)
-      if (data?.days?.length > 0) {
-        setSelectedDay(data.days[0])
-      }
+      const data = await getBooks()
+      setBooks(data)
       setLoading(false)
     }
-    loadBook()
+    loadBooks()
   }, [])
 
   const handleSelectDay = (day) => {
@@ -315,6 +147,21 @@ export default function BookNotes() {
     setShowQuiz(false)
     setQuizAnswers({})
     setShowResults(false)
+  }
+
+  const handleOpenBook = async (bookId) => {
+    setLoading(true)
+    setBookData(null)
+    setSelectedDay(null)
+    setShowQuiz(false)
+    setQuizAnswers({})
+    setShowResults(false)
+    const data = await getBook(bookId)
+    setBookData(data)
+    if (data?.days?.length > 0) {
+      setSelectedDay(data.days[0])
+    }
+    setLoading(false)
   }
 
   const handleQuizAnswer = (questionId, value) => {
@@ -327,7 +174,8 @@ export default function BookNotes() {
 
   const calculateScore = () => {
     if (!selectedDay) return 0
-    const dayQuiz = quizData[selectedDay.id] || []
+    const dayQuiz = selectedDay.quiz || []
+    if (dayQuiz.length === 0) return 0
     const correct = dayQuiz.filter((q, idx) => {
       const key = `${selectedDay.day}-${idx}`
       return quizAnswers[key] === q.correct
@@ -348,16 +196,17 @@ export default function BookNotes() {
 
   // 阅读视图
   if (selectedDay && bookData) {
-    const dayQuiz = quizData[selectedDay.id] || []
+    const dayQuiz = selectedDay.quiz || []
+    const hasQuiz = dayQuiz.length > 0
 
     return (
       <div className="space-y-6">
         {/* 返回按钮 */}
         <button
-          onClick={() => { setSelectedDay(null); setShowQuiz(false); }}
+          onClick={() => { setSelectedDay(null); setBookData(null); setShowQuiz(false); }}
           className="flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
         >
-          <span>←</span> 返回{bookData.title}
+          <span>←</span> 返回书籍列表
         </button>
 
         {/* 顶部导航 */}
@@ -366,19 +215,21 @@ export default function BookNotes() {
             <span className="text-3xl">{bookData.cover}</span>
             <div>
               <h1 className="text-2xl font-bold text-[var(--text-primary)]">{bookData.title}</h1>
-              <p className="text-sm text-[var(--text-secondary)]">第{selectedDay.day}天：{selectedDay.title}</p>
+              <p className="text-sm text-[var(--text-secondary)]">第{selectedDay.day}章：{selectedDay.title}</p>
             </div>
           </div>
-          <button
-            onClick={() => setShowQuiz(!showQuiz)}
-            className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all
-              ${showQuiz
-                ? 'bg-[var(--text-primary)] text-[var(--bg-primary)] shadow-md'
-                : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }`}
-          >
-            {showQuiz ? '📖 阅读' : '📝 测试'}
-          </button>
+          {hasQuiz && (
+            <button
+              onClick={() => setShowQuiz(!showQuiz)}
+              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all
+                ${showQuiz
+                  ? 'bg-[var(--text-primary)] text-[var(--bg-primary)] shadow-md'
+                  : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+            >
+              {showQuiz ? '📖 阅读' : '📝 测试'}
+            </button>
+          )}
         </div>
 
         {/* 内容区域 */}
@@ -387,7 +238,7 @@ export default function BookNotes() {
           <div className="space-y-6">
             <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-8">
               <h2 className="text-xl font-bold mb-6 text-[var(--text-primary)]">
-                📝 第{selectedDay.day}天 小测试
+                📝 第{selectedDay.day}章 小测试
               </h2>
               <div className="space-y-8">
                 {dayQuiz.map((q, idx) => {
@@ -451,6 +302,28 @@ export default function BookNotes() {
                 <div className="mt-8 text-center">
                   <div className="text-5xl font-bold text-[var(--text-primary)] mb-2">{calculateScore()}%</div>
                   <p className="text-[var(--text-secondary)] mb-4">测试完成</p>
+                  {(selectedDay.referenceAnswer || selectedDay.chapterSummary || selectedDay.chapterPrediction) && (
+                    <div className="text-left bg-[var(--hover-bg)] border border-[var(--border-color)] rounded-2xl p-5 mb-5 space-y-4">
+                      {selectedDay.referenceAnswer && (
+                        <div>
+                          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-2">参考答案</h3>
+                          <DayContent content={selectedDay.referenceAnswer} />
+                        </div>
+                      )}
+                      {selectedDay.chapterSummary && (
+                        <div>
+                          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-2">本章总结</h3>
+                          <DayContent content={selectedDay.chapterSummary} />
+                        </div>
+                      )}
+                      {selectedDay.chapterPrediction && (
+                        <div>
+                          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-2">本章预测</h3>
+                          <DayContent content={selectedDay.chapterPrediction} />
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <button
                     onClick={() => {
                       setShowQuiz(false)
@@ -480,7 +353,7 @@ export default function BookNotes() {
                       : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-color)] hover:text-[var(--text-primary)]'
                     }`}
                 >
-                  第{day.day}天
+                  第{day.day}章
                 </button>
               ))}
             </div>
@@ -513,18 +386,46 @@ export default function BookNotes() {
 
       {/* 书籍列表 */}
       <section className="max-w-4xl mx-auto">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 mb-6 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_180px] gap-3">
+            <input
+              value={searchTerm}
+              onChange={event => setSearchTerm(event.target.value)}
+              placeholder="搜索书名、简介或标签"
+              className="w-full px-4 py-3 rounded-xl bg-[var(--hover-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--text-primary)] transition-colors"
+            />
+            <select
+              value={sortBy}
+              onChange={event => setSortBy(event.target.value)}
+              className="w-full px-4 py-3 rounded-xl bg-[var(--hover-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--text-primary)] transition-colors"
+            >
+              <option value="newest">按最新排序</option>
+              <option value="title">按名称排序</option>
+              <option value="length">按内容量排序</option>
+            </select>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {allTags.map(tag => (
+              <button
+                key={tag}
+                onClick={() => setActiveTag(tag)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all
+                  ${activeTag === tag
+                    ? 'bg-[var(--text-primary)] text-[var(--bg-primary)] border-transparent'
+                    : 'bg-[var(--hover-bg)] text-[var(--text-secondary)] border-[var(--border-color)] hover:text-[var(--text-primary)]'
+                  }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 gap-6">
-          {books.map(book => (
+          {filteredBooks.map(book => (
             <button
               key={book.id}
-              onClick={() => {
-                getBook(book.id).then(data => {
-                  setBookData(data)
-                  if (data?.days?.length > 0) {
-                    setSelectedDay(data.days[0])
-                  }
-                })
-              }}
+              onClick={() => handleOpenBook(book.id)}
               className="text-left bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 cursor-pointer hover:border-[var(--text-primary)] hover:shadow-lg transition-all duration-300 w-full"
             >
               <div className="flex items-start gap-5">
@@ -541,7 +442,7 @@ export default function BookNotes() {
                       ))}
                     </div>
                     <div className="ml-auto flex items-center gap-3">
-                      <span className="text-sm text-[var(--text-muted)]">{book.totalDays} 天内容</span>
+                      <span className="text-sm text-[var(--text-muted)]">{book.totalDays} 章内容</span>
                       <span className="text-[var(--text-primary)] font-medium">开始阅读 →</span>
                     </div>
                   </div>
@@ -550,6 +451,11 @@ export default function BookNotes() {
             </button>
           ))}
         </div>
+        {filteredBooks.length === 0 && (
+          <div className="text-center py-12 text-[var(--text-secondary)]">
+            没有找到匹配的内容
+          </div>
+        )}
       </section>
     </div>
   )
