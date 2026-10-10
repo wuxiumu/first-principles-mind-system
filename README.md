@@ -1,4 +1,9 @@
-# FirstPrinciples-MindSystem
+# first-principles-mind-system · 第一性原理思维看板
+
+> 目标拆解与自我管理的 **前端可视化成长系统**，思维结构化展示。
+
+**定制：** 微信 **qingbao199101**（备注：思维系统）｜ [wuxiumu@163.com](mailto:wuxiumu@163.com)
+
 一款基于第一性原理、目标拆解、自我管理思维搭建的前端可视化成长系统，融合7天管理高手思维，沉淀个人认知、做事逻辑与成长感悟，极简高级UI，主打思维结构化、认知可视化。
 
 前端个人项目：第一性原理·自我管理成长系统 GitHub 完整规划
@@ -112,3 +117,67 @@
   我写这个前端项目，是想用代码约束自己、记录自己、优化自己。
   代码可以不断迭代，人的认知也应该永远进化。
   不求速成，但求沉淀；不求繁多，但求通透。
+
+## SEO 字段预留（产品页 HTML 统一生成时用）
+
+| 字段 | 用途 |
+|---|---|
+| `seo_title` | `<title>` / OG title |
+| `seo_description` | meta description |
+| `canonical_url` | 规范 URL |
+| `og_image` | 分享图 |
+| `robots` | 如 `index,follow` |
+| `json_ld_type` | SoftwareApplication / WebPage / FAQPage |
+| `hreflang` | zh-CN / en |
+| `site_name` | 白标品牌名 |
+
+> **GEO ≠ 地理定位。** GEO = Generative Engine Optimization（生成式引擎优化），见下一节。
+
+## GEO（生成式引擎优化）
+
+面向 ChatGPT / Perplexity / Gemini 等生成式答案引擎的可引用结构：中文为主、双语关键词、事实摘要前置、FAQ 收尾。
+
+### 关键词（中英）
+
+- 中文：第一性原理, 目标拆解, 思维可视化, 自我管理系统
+- English: first principles mind map, goal breakdown, personal OS UI
+
+### 事实摘要
+
+- 产品：第一性原理/目标拆解可视化前端。
+- 适合：个人成长、教练、知识付费配套工具。
+- 交付：白标、模板、嵌入站。
+- 不做：不是心理咨询或医疗建议。
+
+### FAQ
+
+**Q：这是什么？**  
+A：见事实摘要「产品」。
+
+**Q：如何定制？**  
+A：微信 `qingbao199101`，备注项目名。
+
+**Q：是否含密钥？**  
+A：默认不含，自行配置。
+
+## 定制合作
+
+模板包、白标、嵌入。加微信备注「思维系统」。
+
+---
+
+## 联系方式
+
+定制、演示或合作：
+
+- 邮箱：[wuxiumu@163.com](mailto:wuxiumu@163.com)
+- 微信：**qingbao199101**（添加请备注来意）
+
+### 赞助支持
+
+如果内容对你有帮助，欢迎自愿赞助。
+
+| 微信赞赏码 | 支付宝收款码 |
+|---|---|
+| ![微信赞赏码](https://chiguashentan-test.oss-cn-beijing.aliyuncs.com/wxprogram/zan/20261002185236_31_227.png) | ![支付宝收款码](https://chiguashentan-test.oss-cn-beijing.aliyuncs.com/wxprogram/zan/20261002185309_32_227.jpg) |
+
