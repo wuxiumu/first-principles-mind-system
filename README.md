@@ -118,6 +118,20 @@
   代码可以不断迭代，人的认知也应该永远进化。
   不求速成，但求沉淀；不求繁多，但求通透。
 
+
+## 快速开始
+
+```bash
+npm install && npm run dev
+# 或 ./start.sh
+```
+
+## 冒烟自检
+
+```bash
+bash scripts/smoke.sh
+```
+
 ## SEO 字段预留（产品页 HTML 统一生成时用）
 
 | 字段 | 用途 |
